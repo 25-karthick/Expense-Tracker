@@ -10,6 +10,22 @@ class NewExpense extends StatefulWidget{
 class _NewExpensestate extends State<NewExpense>{
 
   final textcontroller=TextEditingController();
+  final amountcontroller=TextEditingController();
+
+  void datepicker(){
+    final now=DateTime.now();
+    final firstDate=DateTime(now.year-1,now.month,now.day);
+    final lastDate=now;
+    showDatePicker(context: context, firstDate: firstDate, lastDate: lastDate);
+  }
+
+  @override
+  void dispose() {
+    textcontroller.dispose();
+    amountcontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,29 +40,34 @@ class _NewExpensestate extends State<NewExpense>{
               label: Text("Title"),
             ),
           ),
-              TextField(
+              Row(
+                children:[
+                  Expanded(child:TextField(
               keyboardType: TextInputType.number,
-              controller: textcontroller,
+              controller: amountcontroller,
               maxLength: 5,
               decoration: InputDecoration(
-                label: Text("₹"),
+                prefixText: "\₹",
+                label: Text("Amount"),
               ),
             ),
-          TextField(
-            keyboardType: TextInputType.datetime,
-            controller: textcontroller,
-            maxLength: 5,
-            decoration: InputDecoration(
-              label: Text("Date"),
-            ),
-          ),
-          Center(
-              child: Row(
+                  ),
+                  const SizedBox(width: 16,),
+                  Expanded(child:Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text("Selected Date"),
+                      IconButton(onPressed: datepicker, icon: Icon(Icons.calendar_month_sharp)),
+                    ],
+                  ),
+                  ),
+      ]
+              ),
+          Row(
                 children: [
                   ElevatedButton(onPressed: (){}, child: Text("Save Change")),
                   ElevatedButton(onPressed: (){}, child: Text("Cancel")),
                 ],
-              ),
           ),
         ],
       ),
