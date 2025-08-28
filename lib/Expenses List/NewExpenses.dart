@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:expense_tracker/Model/expenses.dart';
 
 class NewExpense extends StatefulWidget{
   @override
@@ -11,12 +12,21 @@ class _NewExpensestate extends State<NewExpense>{
 
   final textcontroller=TextEditingController();
   final amountcontroller=TextEditingController();
+  DateTime? selectedDate;
+  Category selectedcategory=Category.OTHERS;
 
-  void datepicker(){
+  void datepicker() async{
     final now=DateTime.now();
     final firstDate=DateTime(now.year-1,now.month,now.day);
     final lastDate=now;
-    showDatePicker(context: context, firstDate: firstDate, lastDate: lastDate);
+    final datepickered= await showDatePicker(
+        context: context,
+        firstDate: firstDate,
+        lastDate: lastDate
+    );
+    setState(() {
+      selectedDate=datepickered!;
+    });
   }
 
   @override
@@ -53,21 +63,41 @@ class _NewExpensestate extends State<NewExpense>{
             ),
                   ),
                   const SizedBox(width: 16,),
-                  Expanded(child:Row(
+                  Expanded(
+                    child:Row(
                     mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text("Selected Date"),
+                      Text(selectedDate==null ?"Selected Date" :formatter.format(selectedDate!) ),
                       IconButton(onPressed: datepicker, icon: Icon(Icons.calendar_month_sharp)),
                     ],
                   ),
                   ),
       ]
               ),
-          Row(
-                children: [
-                  ElevatedButton(onPressed: (){}, child: Text("Save Change")),
-                  ElevatedButton(onPressed: (){}, child: Text("Cancel")),
-                ],
+          Container(
+            child: Row(
+                  children: [
+                    DropdownButton(
+                      value: selectedcategory,
+                        items: Category.values.map(
+                          (Category)=>DropdownMenuItem(
+                          value: Category,
+                          child: Text(Category.name)),
+                    ).toList(),
+                        onChanged: (value){
+                          if(value==null){
+                            return;
+                          }
+                          setState(() {
+                            selectedcategory=value;
+                          });
+                        }
+                    ),
+                    ElevatedButton(onPressed: (){}, child: Text("Save Change")),
+                    ElevatedButton(onPressed: (){}, child: Text("Cancel")),
+                  ],
+            ),
           ),
         ],
       ),
