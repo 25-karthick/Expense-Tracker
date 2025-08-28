@@ -1,8 +1,13 @@
+import 'package:expense_tracker/Expenses%20List/expensesListwidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/Model/expenses.dart';
+import 'package:expense_tracker/Expenses List/expense.dart';
 
 class NewExpense extends StatefulWidget{
+  const NewExpense({super.key,required this.onaddexpense});
+
+  final void Function(Expenses expense) onaddexpense;
   @override
   State<StatefulWidget> createState() {
     return _NewExpensestate();
@@ -14,6 +19,28 @@ class _NewExpensestate extends State<NewExpense>{
   final amountcontroller=TextEditingController();
   DateTime? selectedDate;
   Category selectedcategory=Category.OTHERS;
+
+  void checkvalid(){
+    final checker=textcontroller.text.trim().isEmpty;
+    final amountchecker=double.tryParse(amountcontroller.text);
+    if(checker==null || amountchecker==null || amountchecker<=0 || selectedDate==null){
+      showDialog(context: context, builder:(ctx)=>AlertDialog(
+        title: Text("Invalid User Input"),
+        content: Text("You have entered Invalid title,amount or date and Category,Please check before save changes"),
+        actions: [
+          TextButton(onPressed: (){
+      Navigator.pop(ctx);
+      },
+            child: Text("Okay"),
+      )
+
+        ],
+      ));
+      return;
+    }
+    widget.onaddexpense(Expenses(title: textcontroller.text, amount: amountchecker, date: selectedDate!, Categories:selectedcategory));
+    Navigator.pop(context);
+  }
 
   void datepicker() async{
     final now=DateTime.now();
@@ -94,8 +121,10 @@ class _NewExpensestate extends State<NewExpense>{
                           });
                         }
                     ),
-                    ElevatedButton(onPressed: (){}, child: Text("Save Change")),
-                    ElevatedButton(onPressed: (){}, child: Text("Cancel")),
+                    ElevatedButton(onPressed: checkvalid, child: Text("Save Change")),
+                    TextButton(onPressed: (){
+                      Navigator.pop(context);
+                    }, child: Text("Cancel")),
                   ],
             ),
           ),

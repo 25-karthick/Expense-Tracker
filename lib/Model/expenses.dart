@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
 const uuid=Uuid();
-final formatter=DateFormat.yMd('en-GB');
+final formatter=DateFormat.yMd();
 enum Category{ID,FOOD,TRAVEL,OTHERS}
 
 const CategoryIcon={
