@@ -25,6 +25,12 @@ class _expensetrack extends State<Expense>{
     });
   }
 
+  void removeexpenses(Expenses expense){
+    setState(() {
+      ExpenseList.remove(expense);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +44,7 @@ class _expensetrack extends State<Expense>{
       ),
       body: Column(
         children: [
-          Text('Hello world'),
-          ExpensesList(expensesList: ExpenseList,),
+          ExpensesList(expensesList: ExpenseList,onremoveexpense: removeexpenses,),
         ],
       ),
     );
