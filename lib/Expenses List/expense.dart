@@ -38,8 +38,17 @@ class _expensetrack extends State<Expense>{
         title: Text("Expense Tracker",style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.deepPurple,
         actions: [
-          IconButton(onPressed: _showundersheet,
-            icon: Icon(Icons.add,),),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+              child: IconButton(onPressed: _showundersheet,
+                icon: Icon(Icons.add,color: Colors.deepPurple,size: 30,),),
+            ),
+          ),
         ],
       ),
       body: Column(

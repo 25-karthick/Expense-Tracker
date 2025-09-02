@@ -16,12 +16,14 @@ class ExpensesList extends StatelessWidget{
       child: ListView.builder(
         itemCount:expensesList.length,
         itemBuilder: (context,index)=> Dismissible(
-            key: ValueKey(expensesList[index]),
-            onDismissed:(direction){
-              onremoveexpense(expensesList[index]);
-            },
-            child: ExpenseItem(expensesList[index]),
-      ),
+          key: ValueKey(expensesList[index]),
+          direction: DismissDirection.startToEnd, // allow only right swipe
+          onDismissed: (direction) {
+            onremoveexpense(expensesList[index]);
+          },
+          child: ExpenseItem(expensesList[index]),
+        )
+
       ),
     );
   }
